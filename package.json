@@ -1,43 +1,47 @@
 {
-  "name": "sentinel",
-  "displayName": "Sentinel",
-  "description": "An AI prompt-leak sentinel.",
-  "version": "0.0.1",
+  "name": "sentinel-extension",
+  "publisher": "your-publisher-name",
+  "displayName": "Sentinel Chat Participant",
+  "description": "A security-focused chat participant that scans prompts for secrets",
+  "version": "0.1.0",
   "engines": {
-    "vscode": "^1.103.0"
+    "vscode": "^1.95.0"
   },
   "categories": [
-    "Other"
+    "AI",
+    "Chat"
   ],
-  "activationEvents": [
-    "onView:workbench.view.chat"
-  ],
+  "activationEvents": [],
   "main": "./out/extension.js",
   "contributes": {
-    "commands": [
+    "chatParticipants": [
       {
-        "command": "sentinel.checkSelection",
-        "title": "Sentinel: Check Selection for Secrets"
+        "id": "sentinel.security",
+        "fullName": "Sentinel",
+        "name": "sentinel",
+        "description": "🛡️ Security-focused assistant that scans for secrets and provides secure coding guidance",
+        "isSticky": true,
+        "commands": [
+          {
+            "name": "scan",
+            "description": "Scan the provided text for potential secrets and security issues"
+          },
+          {
+            "name": "help",
+            "description": "Show available security scanning features"
+          }
+        ]
       }
     ]
   },
   "scripts": {
     "vscode:prepublish": "npm run compile",
     "compile": "tsc -p ./",
-    "watch": "tsc -watch -p ./",
-    "pretest": "npm run compile && npm run lint",
-    "lint": "eslint src",
-    "test": "vscode-test"
+    "watch": "tsc -watch -p ./"
   },
   "devDependencies": {
-    "@types/mocha": "^10.0.10",
-    "@types/node": "22.x",
-    "@types/vscode": "^1.102.0",
-    "@typescript-eslint/eslint-plugin": "^8.39.0",
-    "@typescript-eslint/parser": "^8.39.0",
-    "@vscode/test-cli": "^0.0.11",
-    "@vscode/test-electron": "^2.5.2",
-    "eslint": "^9.32.0",
-    "typescript": "^5.9.2"
+    "@types/vscode": "^1.95.0",
+    "@types/node": "^20",
+    "typescript": "^5.8.2"
   }
 }

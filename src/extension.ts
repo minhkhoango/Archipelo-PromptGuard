@@ -1,71 +1,53 @@
 import * as vscode from 'vscode';
-import { checkForSecrets, ScanResult } from './secretScanner';
+import { SecretScanner } from './secretScanner';
 
-let debounceTimer: NodeJS.Timeout;
+export function activate(context: vscode.ExtensionContext) {
+  const scanner = new SecretScanner();
+  // Define the chat request handler
+  const handler: vscode.ChatRequestHandler = async (
+    request: vscode.ChatRequest,
+    _context: vscode.ChatContext,
+    stream: vscode.ChatResponseStream,
+    _token: vscode.CancellationToken
+  ): Promise<vscode.ChatResult> => {
+    const findings = scanner.scanForSecrets(request.prompt);
+    
+    if (findings.length > 0) {
+      let highlightedPrompt = request.prompt;
 
-// A dummy content provider. Its only job is to exist and be registered.
-// This is the "license" that lets us listen to the chatSessionInput scheme.
-class ChatInputContentProvider implements vscode.TextDocumentContentProvider {
-  // We don't need to provide content, but we must implement the interface.
-  provideTextDocumentContent(uri: vscode.Uri): string {
-    return '';
-  }
-}
+      // Create a set of unique secret values to handle duplicates
+      const uniqueSecretValues = new Set(findings.map(f => f.value));
 
-/**
- * The core scanning function. It's debounced to prevent performance issues.
- * @param document The text document to scan.
- */
-function scanDocument(document: vscode.TextDocument): void {
-  // This is the correct scheme, confirmed by your own investigation.
-  // We will only see this log if the event fires AND the scheme matches.
-  console.log('[PROMPTGUARD] 5. scanDocument() called with the correct scheme.');
+      uniqueSecretValues.forEach(secretValue => {
+        const regex = new RegExp(escapeRegExp(secretValue), 'g');
+        highlightedPrompt = highlightedPrompt.replace(regex, `**${secretValue}**`);
+      });
 
-  if (document.uri.scheme !== 'chatSessionInput') {
-    return;
-  }
+      // Contruct the final, visually-rich response
+      stream.markdown(`🚨 **LEAK DETECTED** 🚨\n\nFound ${findings.length}
+        potential secret(s) in your prompt. I've highlighted them for you below:\n\n`);
+      // Use a blockquote to visually separate and display the user's highlighted text
+      stream.markdown(`> ${highlightedPrompt.replace(/\n/g, '\n> ')}\n\n`);
 
-  clearTimeout(debounceTimer);
-  debounceTimer = setTimeout(() => {
-    const text = document.getText();
-    const result: ScanResult = checkForSecrets(text);
-
-    if (result.isSecret) {
-      const secretNames = result.findings.map((f) => f.name).join(', ');
-      vscode.window.showWarningMessage(
-        `🚨 PROMPTGUARD: Potential leak detected! Found: ${secretNames}.`
-      );
-      console.log('[PROMPTGUARD] 6. Secret found and warning displayed.');
+      stream.markdown(`⚠️ Please review and remove the highlighted secrets before proceeding.`);
+    } else {
+      stream.markdown(`✅ No secrets detected. Your prompt is clear.`);
     }
-  }, 300);
+
+    return { };
+  };
+
+  const sentinel = vscode.chat.createChatParticipant('sentinel.security', handler);
+  sentinel.iconPath = new vscode.ThemeIcon('shield');
+  context.subscriptions.push(sentinel);
 }
 
-export function activate(context: vscode.ExtensionContext): void {
-  // This is a trace. We need to see every step.
-  console.log('[PROMPTGUARD] 1. activate() called.');
-  try {
-    // 1. Perform the handshake: Register our provider for the scheme.
-    const provider = new ChatInputContentProvider();
-    const providerRegistration = vscode.workspace.registerTextDocumentContentProvider(
-      'chatSessionInput',
-      provider
-    );
-    console.log('[PROMPTGUARD] 2. TextDocumentContentProvider registered successfully.');
-  } catch (e) {
-    console.error('[PROMPTGUARD] 2a. FAILED to register provider:', e);
-  }
+export function deactivate() {}
 
-  // 2. Set up our listener, which will now receive events.
-  try {
-    const changeListener = vscode.workspace.onDidChangeTextDocument(event => {
-      scanDocument(event.document);
-    });
-    console.log('[PROMPTGUARD] 3. onDidChangeTextDocument listener registered successfully.');
-  } catch (e) {
-    console.error('[PROMPTGUARD] 3a. FAILED to register listener:', e);
-  }
-}
-
-export function deactivate(): void {
-  clearTimeout(debounceTimer);
+// ADD THIS HELPER FUNCTION TO THE BOTTOM OF extension.ts
+/**
+ * Escapes special characters in a string for use in a regular expression.
+ */
+function escapeRegExp(string: string): string {
+  return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); // $& means the whole matched string
 }
