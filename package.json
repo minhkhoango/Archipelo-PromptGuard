@@ -1,8 +1,8 @@
 {
-  "name": "sentinel-extension",
+  "name": "archipelo-risklens",
   "publisher": "your-publisher-name",
-  "displayName": "Sentinel Chat Participant",
-  "description": "A security-focused chat participant that scans prompts for secrets",
+  "displayName": "Archipelo RiskLens",
+  "description": "Proactively scans AI chat prompts to prevent secret leaks, integrating seamlessly with the Archipelo DevSPM platform.",
   "version": "0.1.0",
   "engines": {
     "vscode": "^1.85.0"
@@ -17,9 +17,9 @@
     "commands": [],
     "chatParticipants": [
       {
-        "id": "sentinel.security",
-        "fullName": "Sentinel",
-        "name": "sentinel",
+        "id": "archipelo.risklens",
+        "fullName": "Archipelo RiskLens",
+        "name": "risklens",
         "description": "🛡️ Security-focused assistant that scans for secrets and provides secure coding guidance",
         "isSticky": true,
         "commands": [

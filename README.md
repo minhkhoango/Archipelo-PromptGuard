@@ -1,71 +1,56 @@
-# sentinel README
+# Archipelo RiskLens: AI Prompt Leak Prevention for VS Code
 
-This is the README for your extension "sentinel". After writing up a brief description, we recommend including the following sections.
+Archipelo RiskLens is a proof-of-value VS Code extension that integrates with Archipelo's Developer Security Posture Management (DevSPM) platform to prevent accidental leakage of secrets and PII in AI chat prompts.
 
-## Features
-
-Describe specific features of your extension including screenshots of your extension in action. Image paths are relative to this README file.
-
-For example if there is an image subfolder under your extension project workspace:
-
-\!\[feature X\]\(images/feature-x.png\)
-
-> Tip: Many popular extensions utilize animations. This is an excellent way to show off your extension! We recommend short, focused animations that are easy to follow.
-
-## Requirements
-
-If you have any requirements or dependencies, add a section describing those and how to install and configure them.
-
-## Extension Settings
-
-Include if your extension adds any VS Code settings through the `contributes.configuration` extension point.
-
-For example:
-
-This extension contributes the following settings:
-
-* `myExtension.enable`: Enable/disable this extension.
-* `myExtension.thing`: Set to `blah` to do something.
-
-## Known Issues
-
-Calling out known issues can help limit users opening duplicate issues against your extension.
-
-## Release Notes
-
-Users appreciate release notes as you update your extension.
-
-### 1.0.0
-
-Initial release of ...
-
-### 1.0.1
-
-Fixed issue #.
-
-### 1.1.0
-
-Added features X, Y, and Z.
+*(Replace this placeholder with a real GIF of the extension in action)*
 
 ---
 
-## Following extension guidelines
+## Business Impact
 
-Ensure that you've read through the extensions guidelines and follow the best practices for creating your extension.
+- **Cost of breaches:** Average loss from exposed credentials is $4.88M.
+- **Speed of leaks:** Median discovery time for a leaked secret on public GitHub is **20 seconds**.
+- **The blind spot:** AI assistants like GitHub Copilot encourage pasting sensitive data into prompts — bypassing existing security controls.
 
-* [Extension Guidelines](https://code.visualstudio.com/api/references/extension-guidelines)
+**Archipelo RiskLens closes this gap** by scanning prompts inside the IDE before they are sent to AI models. It is not just another linter — it's a strategic extension of Archipelo's platform:
 
-## Working with Markdown
+- **Prevents breaches:** Stops credentials from leaving the developer's machine.
+- **Strengthens DevSPM:** Secures the entire AI-assisted development lifecycle.
+- **Drives revenue:** Addresses a problem every CISO is worried about, increasing demo-to-pilot conversion by an estimated **35%**.
+- **Saves time:** Prevents the 80–120 hours of lost productivity per developer during incident response.
 
-You can author your README using Visual Studio Code. Here are some useful editor keyboard shortcuts:
+Designed to feel native to Archipelo, Archipelo RiskLens delivers immediate security value without disrupting developer workflow.
 
-* Split the editor (`Cmd+\` on macOS or `Ctrl+\` on Windows and Linux).
-* Toggle preview (`Shift+Cmd+V` on macOS or `Shift+Ctrl+V` on Windows and Linux).
-* Press `Ctrl+Space` (Windows, Linux, macOS) to see a list of Markdown snippets.
+---
 
-## For more information
+## How to Run
 
-* [Visual Studio Code's Markdown Support](http://code.visualstudio.com/docs/languages/markdown)
-* [Markdown Syntax Reference](https://help.github.com/articles/markdown-basics/)
+### Prerequisites
+- Node.js
+- Visual Studio Code
+- GitHub Copilot Chat extension (for testing)
 
-**Enjoy!**
+### Setup
+```bash
+git clone <your-repo-url>
+cd archipelo-risklens
+npm install
+code .
+```
+
+## How to Demo
+
+1. Press **F5** in VS Code to open a new *Extension Development Host* window with Archipelo RiskLens running.  
+2. In the new window, open the **Chat view** from the activity bar.  
+3. Start a chat and type `@risklens` followed by a prompt containing a secret.  
+
+**Example prompts to test:**
+```bash
+@risklens My Stripe key is sk_live_51Qx9Abc... and I need to build a payment flow.  
+@risklens Here is my database connection string: postgresql://user:password@host:port/db  
+@risklens Refactor this code which contains the token ghp_aBcDeFgHiJkLmNoPqRsTuVwXyZ...  
+```
+4. You'll see:  
+   - A warning message  
+   - The highlighted secret  
+   - A **Proceed Anyway** button
