@@ -5,7 +5,7 @@
   "description": "A security-focused chat participant that scans prompts for secrets",
   "version": "0.1.0",
   "engines": {
-    "vscode": "^1.95.0"
+    "vscode": "^1.85.0"
   },
   "categories": [
     "AI",
@@ -14,6 +14,7 @@
   "activationEvents": [],
   "main": "./out/extension.js",
   "contributes": {
+    "commands": [],
     "chatParticipants": [
       {
         "id": "sentinel.security",
@@ -23,12 +24,8 @@
         "isSticky": true,
         "commands": [
           {
-            "name": "scan",
-            "description": "Scan the provided text for potential secrets and security issues"
-          },
-          {
-            "name": "help",
-            "description": "Show available security scanning features"
+            "name": "proceed",
+            "description": "Acknowledge the risk of a secret leak and proceed."
           }
         ]
       }
@@ -40,7 +37,7 @@
     "watch": "tsc -watch -p ./"
   },
   "devDependencies": {
-    "@types/vscode": "^1.95.0",
+    "@types/vscode": "^1.85.0",
     "@types/node": "^20",
     "typescript": "^5.8.2"
   }
