@@ -34,14 +34,20 @@ Designed to feel native to Archipelo, Archipelo RiskLens delivers immediate secu
 ```bash
 git clone https://github.com/minhkhoango/Archipelo-RiskLens.git
 cd Archipelo-RiskLens
+# wipe old build output just in case
+rm -rf out
 npm install
-code .
+# verify TypeScript setup before compiling
+npx tsc --version
+npm run compile
+# check that the compiled entry file exists
+ls -l out/extension.js
 python generate_test_data.py
 ```
 
 ## How to Demo
 
-1. Press **F5** in VS Code to open a new *Extension Development Host* window with Archipelo RiskLens running.  
+1. Head to a .ts file, press **F5** in VS Code, and choose "VS Code Extension Development" to get Archipelo RiskLens running.  
 2. In the new window, open the **Chat view** from the activity bar.  
 3. Start a chat and type `@risklens` followed by a prompt containing a secret.  
 
