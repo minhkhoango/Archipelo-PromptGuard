@@ -2,7 +2,7 @@
 
 Archipelo RiskLens is a proof-of-value VS Code extension that integrates with Archipelo's Developer Security Posture Management (DevSPM) platform to prevent accidental leakage of secrets and PII in AI chat prompts.
 
-*(Replace this placeholder with a real GIF of the extension in action)*
+![risklens-demo](assets/risklens-demo.gif)
 
 ---
 
@@ -32,10 +32,11 @@ Designed to feel native to Archipelo, Archipelo RiskLens delivers immediate secu
 
 ### Setup
 ```bash
-git clone <your-repo-url>
-cd archipelo-risklens
+git clone https://github.com/minhkhoango/Archipelo-RiskLens.git
+cd Archipelo-RiskLens
 npm install
 code .
+python generate_test_data.py
 ```
 
 ## How to Demo

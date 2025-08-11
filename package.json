@@ -4,6 +4,10 @@
   "displayName": "Archipelo RiskLens",
   "description": "Proactively scans AI chat prompts to prevent secret leaks, integrating seamlessly with the Archipelo DevSPM platform.",
   "version": "0.1.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/minhkhoango/Archipelo-RiskLens.git"
+  },
   "engines": {
     "vscode": "^1.85.0"
   },

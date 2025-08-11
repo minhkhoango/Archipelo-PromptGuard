@@ -30,18 +30,19 @@ def create_test_prompts(keys: List[str]) -> List[str]:
     """
     prompts = [
         (
-            f"@risklens It's 2 AM and my brain is fried. Why is this payment failing? "
-            f"My test key is {keys[0]}. Please don't tell my boss."
+            f"@risklens It's 2 AM and my brain is tapioca. My payment test keeps failing, "
+            f"and the sandbox ID is '{keys[0]}'. Can you walk me through a fix "
+            f"before I start debugging my coffee mug instead?"
         ),
         (
-            f"@risklens My cat walked across my keyboard and now my GitHub Actions are broken. "
-            f"I think it has something to do with this token: {keys[1]}. "
-            f"Can you write a script to pet-proof my CI/CD pipeline?"
+            f"@risklens My cat just staged a hostile takeover of my keyboard and now "
+            f"my GitHub Actions have unionized. The workflow badge ID is '{keys[1]}'. "
+            f"Any advice before I have to offer them tuna as severance?"
         ),
         (
-            f"@risklens I inherited this legacy AWS code. The only documentation is a "
-            f"sticky note with this key on it: {keys[2]}. Can you explain what this "
-            f"spaghetti monster does before it achieves sentience?"
+            f"@risklens I inherited an ancient AWS project. The only 'documentation' "
+            f"is a sticky note saying: '{keys[2]}'. Please translate this relic into "
+            f"human-readable code before it declares itself ruler of the dev environment."
         ),
     ]
     return prompts

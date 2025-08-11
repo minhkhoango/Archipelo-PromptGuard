@@ -14,7 +14,7 @@ export function activate(context: vscode.ExtensionContext) {
     // The main handler for the @risklens chat participant.
     const handler: vscode.ChatRequestHandler = async (
         request: vscode.ChatRequest,
-        chatContext: vscode.ChatContext,
+        _chatContext: vscode.ChatContext,
         stream: vscode.ChatResponseStream,
         token: vscode.CancellationToken
     ): Promise<IRiskLensChatResult> => {
@@ -43,9 +43,16 @@ export function activate(context: vscode.ExtensionContext) {
         console.log(`[RiskLens] Scan complete. Found ${findings.length} potential secret(s).`);
 
         if (findings.length > 0) {
-            // --- Sub-path 2a: Secrets Found (The Warning Flow) ---
+            let highlighted = request.prompt;
+            findings.forEach(f => {
+            highlighted = highlighted.replace(
+                new RegExp(f.value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'g'),
+                `**${f.value}**`
+            );
+            });
+
             stream.markdown(`🚨 **LEAK DETECTED** 🚨\n\nI found ${findings.length} potential secret(s) in your prompt. Please review and remove them.\n\n`);
-            stream.markdown(`> ${request.prompt.replace(/\n/g, '\n> ')}\n\n`);
+            stream.markdown(`> ${highlighted.replace(/\n/g, '\n> ')}\n\n`);
             stream.markdown(`If you're certain this is not a secret, you can proceed.`);
             
             // It triggers a global command that acts as a simple forwarder.
